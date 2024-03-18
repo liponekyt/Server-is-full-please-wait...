@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timer Reset on Click</title>
+</head>
+<body>
+
+<p id="timer">30</p>
+<a href="#" onclick="resetTimer(); return false;">Kliknij, aby zresetować czas</a>
+
+<script>
+// Ustaw początkowy czas
+var timeLeft = 30;
+var timerId;
+
+// Funkcja resetująca timer
+function resetTimer() {
+    clearInterval(timerId);
+    timeLeft = 30; // resetowanie do 30 sekund
+    document.getElementById('timer').textContent = timeLeft;
+    startTimer();
+}
+
+// Funkcja startująca odliczanie
+function startTimer() {
+    timerId = setInterval(countdown, 1000);
+}
+
+// Funkcja odliczająca czas
+function countdown() {
+    if (timeLeft == 0) {
+        clearTimeout(timerId);
+        doSomething();
+    } else {
+        document.getElementById('timer').textContent = timeLeft + ' seconds remaining';
+        timeLeft--;
+    }
+}
+
+// Funkcja wykonująca jakąś akcję po upłynięciu czasu
+function doSomething() {
+    alert("Czas się skończył!");
+}
+
+// Rozpoczęcie odliczania
+startTimer();
+</script>
+
+</body>
+</html>
