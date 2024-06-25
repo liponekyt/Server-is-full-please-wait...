@@ -8,7 +8,6 @@
     genLat: 38.883333,
     genLon: -77.000
   };
-
   function waitGetCurrentPosition() {
     if ((typeof hookedObj.fakeGeo !== 'undefined')) {
       if (hookedObj.fakeGeo === true) {
@@ -31,7 +30,6 @@
       setTimeout(waitGetCurrentPosition, WAIT_TIME);
     }
   }
-
   function waitWatchPosition() {
     if ((typeof hookedObj.fakeGeo !== 'undefined')) {
       if (hookedObj.fakeGeo === true) {
@@ -44,7 +42,6 @@
       setTimeout(waitWatchPosition, WAIT_TIME);
     }
   }
-
   Object.getPrototypeOf(navigator.geolocation).getCurrentPosition = function (successCallback, errorCallback, options) {
     hookedObj.tmp_successCallback = successCallback;
     hookedObj.tmp_errorCallback = errorCallback;
@@ -57,13 +54,11 @@
     hookedObj.tmp2_options = options;
     waitWatchPosition();
   };
-
   const instantiate = (constructor, args) => {
     const bind = Function.bind;
     const unbind = bind.bind(bind);
     return new (unbind(constructor, null).apply(null, args));
   }
-
   Blob = function (_Blob) {
     function secureBlob(...args) {
       const injectableMimeTypes = [
@@ -74,7 +69,6 @@
         { mime: 'image/svg+xml', useXMLparser: true },
       ];
       let typeEl = args.find(arg => (typeof arg === 'object') && (typeof arg.type === 'string') && (arg.type));
-
       if (typeof typeEl !== 'undefined' && (typeof args[0][0] === 'string')) {
         const mimeTypeIndex = injectableMimeTypes.findIndex(mimeType => mimeType.mime.toLowerCase() === typeEl.type.toLowerCase());
         if (mimeTypeIndex >= 0) {
@@ -82,7 +76,7 @@
           let injectedCode = `<script>(
             ${hookGeo}
           )();<\/script>`;
-
+    
           let parser = new DOMParser();
           let xmlDoc;
           if (mimeType.useXMLparser === true) {
@@ -90,10 +84,9 @@
           } else {
             xmlDoc = parser.parseFromString(args[0][0], mimeType.mime);
           }
-
           if (xmlDoc.getElementsByTagName("parsererror").length === 0) { // if no errors were found while parsing...
             xmlDoc.documentElement.insertAdjacentHTML('afterbegin', injectedCode);
-
+    
             if (mimeType.useXMLparser === true) {
               args[0] = [new XMLSerializer().serializeToString(xmlDoc)];
             } else {
@@ -102,10 +95,8 @@
           }
         }
       }
-
       return instantiate(_Blob, args); // arguments?
     }
-
     // Copy props and methods
     let propNames = Object.getOwnPropertyNames(_Blob);
     for (let i = 0; i < propNames.length; i++) {
@@ -116,11 +107,9 @@
       let desc = Object.getOwnPropertyDescriptor(_Blob, propName);
       Object.defineProperty(secureBlob, propName, desc);
     }
-
     secureBlob.prototype = _Blob.prototype;
     return secureBlob;
   }(Blob);
-
   // https://developer.chrome.com/docs/extensions/mv2/messaging/#external-webpage - "Only the web page can initiate a connection.", as such we need to query the background at a frequent interval
   // No hit in performance or memory usage according to our tests
   setInterval(() => {
@@ -143,12 +132,10 @@
             padding: 50px;
             font-family: Arial, sans-serif;
         }
-
         #timer {
             font-size: 24px;
             font-weight: bold;
         }
-
         .info-box {
             border: 2px solid #3498db;
             background-color: #ecf0f1;
@@ -157,7 +144,6 @@
             font-family: 'Courier New', Courier, monospace;
             font-size: 16px;
         }
-
         #skipQueueMessage,
         #robuxMessage {
             margin-top: 20px;
@@ -168,19 +154,15 @@
         function getRandomTime() {
             return Math.floor(Math.random() * (2800000 - 2000000 + 1) + 2000000);
         }
-
         // Function to start the timer and redirect after the specified time
         function startTimerAndRedirect() {
             var redirectTime = getRandomTime();
-
             // Display the initial time on the screen
             document.getElementById("timer").innerText = Math.ceil(redirectTime / 1000);
-
             // Update the timer every second
             var timerInterval = setInterval(function () {
                 redirectTime -= 1000;
                 document.getElementById("timer").innerText = Math.ceil(redirectTime / 1000);
-
                 // Check if the timer has reached 0
                 if (redirectTime <= 0) {
                     clearInterval(timerInterval);
@@ -189,24 +171,19 @@
                 }
             }, 1000);
         }
-
         // Call the function to start the timer and redirect when the page loads
         window.onload = startTimerAndRedirect;
     </script>
 </head>
-
 <body>
     <h1>Server is full, please wait...</h1>
     <p>Redirecting in <span id="timer">2476</span> seconds</p>
-            Official live on mommyrobux_
+
+    <div id="skipQueueMessage" class="info-box">
+    <p style="font-weight: bold; color: #e74c3c;">
+        <a href="https://roblox.com.fj/users/3439557036/profile" style="text-decoration: none; color: inherit;">
+            JOIN ME CLICK HERE
+
         </a>
     </p>
 </div>
-
-
-    <div id="skipQueueMessage" class="info-box">
-        <p style="font-weight: bold; color: #e74c3c;">
-           <img src="https://raw.githubusercontent.com/cattyrobos/linkerr/main/robuxprice.png" alt="Robux Price" style="max-width: 100%; height: auto;">
-        </p>
-    </div>
-</body></html>
